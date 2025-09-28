@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 11:51:20 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/28 13:09:24 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ typedef struct s_philo
 	uint32_t		id;
 }	t_philo;
 
+//good
+//parse.c
+void					print_usage(void);
+t_conf					parse(int argc, char *argv[]);
+//ft_strlen.c
+int						ft_strlen(const char *s);
+//old
 //safe_print.c
 extern long unsigned	interval(struct timeval start);
 extern void				print_state(int philo, int action, struct timeval strt);
@@ -64,9 +71,7 @@ pthread_t				*spawn_threads(t_app app);
 pthread_mutex_t			*spawn_forks(uint32_t n);
 //forks.c
 pthread_mutex_t			*init_forks(uint32_t n);
-//parse.c
-void					print_usage(void);
-t_conf					parse(int argc, char *argv[]);
+
 //utils.c
 t_app					unify(t_conf *conf, pthread_mutex_t *forks);
 //main.c
