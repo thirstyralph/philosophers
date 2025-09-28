@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:04:41 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/28 11:58:33 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,25 +21,23 @@ void	notification(uint32_t philo, uint32_t action)
 */
 void	print_conf(t_conf conf)
 {
-	printf("number of philosophers = %u\n", conf.n);
-	printf("time to die = %u\n", conf.ttd);
-	printf("time to eat  = %u\n", conf.tte);
-	printf("time to sleep  = %u\n", conf.tts);
-	printf("number of times the philos must eat = %u\n", conf.limit);
+	printf("number of philosophers = %u/n", conf.n);
+	printf("time to die = %u/n", conf.ttd);
+	printf("time to eat  = %u/n", conf.tte);
+	printf("time to sleep  = %u/n", conf.tts);
+	printf("number of times the philos must eat = %u/n", conf.limit);
 }
 
 int	main(int argc, char *argv[])
 {
-//	uint32_t		i;
+	uint32_t		i;
 	t_conf			conf;
-//	t_app			app;
-//	pthread_t		*threads;
+	t_app			app;
+	pthread_t		*threads;
 	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
-	print_conf(conf);
 	forks = spawn_forks(conf.n);
-	/*
 	app = unify(&conf, forks);
 	threads = spawn_threads(app);
 	if (!threads)
@@ -51,9 +49,6 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	free(threads);
-	*/
-	free(forks);
-
 	return (0);
 }
 /*
