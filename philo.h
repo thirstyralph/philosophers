@@ -34,9 +34,9 @@ typedef struct s_conf
 typedef struct s_app
 {
 	t_conf			conf;
-	struct timeval	*start;
+	struct timeval	start;
 	pthread_mutex_t	*forks;	
-	pthread_mutex_t	*print;
+	pthread_mutex_t	print;
 }	t_app;
 
 typedef struct s_philo
@@ -66,7 +66,7 @@ int						ft_atoi(const char *nptr);
 //routine.c
 void					*_philo_routine(void *arg);
 //spawn_threads.c
-pthread_t				*spawn_threads(t_app app);
+pthread_t				*spawn_threads(t_app *app);
 //spawn_forks.c
 pthread_mutex_t			*spawn_forks(uint32_t n);
 //forks.c

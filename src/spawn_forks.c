@@ -17,12 +17,13 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 	uint32_t		i;
 	pthread_mutex_t	*r;
 
-	r = malloc(sizeof(pthread_mutex_t) * n + 1);
+	r = malloc(sizeof(pthread_mutex_t) * n);
 	if (!r)
 		return (NULL);
 	i = 0;
-	while (i <= n)
+	while (i < n)
 	{
+		printf("forks[%i] !=0\n", i);
 		if (pthread_mutex_init(&r[i], NULL) != 0)
 		{
 			free(r);

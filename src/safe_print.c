@@ -40,7 +40,7 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 
 void	safe_print(int philosopher, int action, t_app app)
 {
-	pthread_mutex_lock(app.print);
+	pthread_mutex_lock(&app.print);
 	print_state(philosopher, action, *app.start);
-	pthread_mutex_unlock(app.print);
+	pthread_mutex_unlock(&app.print);
 }

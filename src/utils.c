@@ -18,8 +18,7 @@ t_app	unify(t_conf *conf, pthread_mutex_t *forks)
 
 	app.conf = *conf;
 	app.forks = forks;
-	pthread_mutex_init(app.print, NULL);
+	pthread_mutex_init(&app.print, NULL);
+	gettimeofday(&app.start, NULL);
 	return (app);
 }
-
-void	

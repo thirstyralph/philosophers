@@ -28,13 +28,18 @@ void	*_philo_routine(void *arg)
 
 	meals = 0;
 	app = (t_app *)arg;
-	while (meals < app->conf.limit && interval(*app->start) < app->conf.ttd)
+	while (meals < app->conf.limit && interval(app->start) < app->conf.ttd)
 	{
 		safe_print(0, 0, *app);
+		usleep(100);
 		safe_print(1, 0, *app);
+		usleep(100);
 		safe_print(2, 0, *app);
+		usleep(100);
 		safe_print(3, 0, *app);
+		usleep(100);
 		safe_print(4, 0, *app);
+		meals++;
 	}
 	return (NULL);
 }

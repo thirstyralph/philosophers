@@ -30,20 +30,24 @@ void	print_conf(t_conf conf)
 
 int	main(int argc, char *argv[])
 {
-//	uint32_t		i;
+	uint32_t		i;
 	t_conf			conf;
-//	t_app			app;
-//	pthread_t		*threads;
+	t_app			app;
+	pthread_t		*threads;
 	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
 	print_conf(conf);
 	forks = spawn_forks(conf.n);
-	/*
-	app = unify(&conf, forks);
-	threads = spawn_threads(app);
-	if (!threads)
+	if (forks == NULL)
 		return (1);
+	app = unify(&conf, forks);
+	threads = spawn_threads(&app);
+	if (!threads)
+	{
+		free(forks);
+		return (1);
+	}
 	i = 0;
 	while (i < conf.n)
 	{
@@ -51,9 +55,7 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	free(threads);
-	*/
 	free(forks);
-
 	return (0);
 }
 /*
