@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/23 12:58:20 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:19:35 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 		printf("is sleeping");
 	else if (action == 4)
 		printf("has died");
-	printf("/n");
+	printf("\n");
 }
 
-void	safe_print(int philosopher, int action, t_app app)
+void	safe_print(int philosopher, int action, t_app *app)
 {
-	pthread_mutex_lock(&app.print);
-	print_state(philosopher, action, *app.start);
-	pthread_mutex_unlock(&app.print);
+	pthread_mutex_lock(&app->print);
+	print_state(philosopher, action, app->start);
+	pthread_mutex_unlock(&app->print);
 }

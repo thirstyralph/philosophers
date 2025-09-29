@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 13:09:24 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:18:57 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_l;
 	pthread_mutex_t	*fork_r;
 	pthread_t		thread;
-	long long		last_meal;
+	struct timeval	last_meal;
 	uint32_t		meals;
 	uint32_t		id;
 }	t_philo;
@@ -60,13 +60,13 @@ int						ft_strlen(const char *s);
 //safe_print.c
 extern long unsigned	interval(struct timeval start);
 extern void				print_state(int philo, int action, struct timeval strt);
-void					safe_print(int philosopher, int action, t_app app);
+void					safe_print(int philosopher, int action, t_app *app);
 //ft_atoi.c
 int						ft_atoi(const char *nptr);
 //routine.c
 void					*_philo_routine(void *arg);
 //spawn_threads.c
-pthread_t				*spawn_threads(t_app *app);
+t_philo					*spawn_threads(t_app *app);
 //spawn_forks.c
 pthread_mutex_t			*spawn_forks(uint32_t n);
 //forks.c

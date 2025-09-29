@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:57 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:08:27 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:20:02 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,18 @@
  */
 void	*_philo_routine(void *arg)
 {
-	t_app		*app;
-	uint32_t	meals;
+	t_philo		*self;
 
-	meals = 0;
-	app = (t_app *)arg;
-	while (meals < app->conf.limit && interval(app->start) < app->conf.ttd)
+	self = (t_philo *) arg;
+	printf("meals = %u\n limit = %u\n", self->meals, self->app->conf.limit);
+	while ((self->meals < self->app->conf.limit))
 	{
-		safe_print(0, 0, *app);
-		usleep(100);
-		safe_print(1, 0, *app);
-		usleep(100);
-		safe_print(2, 0, *app);
-		usleep(100);
-		safe_print(3, 0, *app);
-		usleep(100);
-		safe_print(4, 0, *app);
-		meals++;
+		safe_print(self->id, 0, self->app);
+		safe_print(self->id, 1, self->app);
+		safe_print(self->id, 2, self->app);
+		safe_print(self->id, 3, self->app);
+		safe_print(self->id, 4, self->app);
+		self->meals++;
 	}
 	return (NULL);
 }

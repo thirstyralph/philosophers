@@ -147,7 +147,7 @@ int	ft_strlen(const char *s)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:04:41 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:05:29 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int	main(int argc, char *argv[])
 	uint32_t		i;
 	t_conf			conf;
 	t_app			app;
-	pthread_t		*threads;
+	t_philo			*philos;
 	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
@@ -183,18 +183,20 @@ int	main(int argc, char *argv[])
 	if (forks == NULL)
 		return (1);
 	app = unify(&conf, forks);
-	threads = spawn_threads(app);
-	if (!threads)
-		return (1);
-	i = 0;
-	while (i < conf.n - 1)
+	philos = spawn_threads(&app);
+	if (!philos)
 	{
-		pthread_join(threads[i], NULL);
+		free(forks);
+		return (1);
+	}
+	i = 0;
+	while (i < conf.n)
+	{
+		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
-	free(threads);
+	free(philos);
 	free(forks);
-
 	return (0);
 }
 /*
@@ -318,7 +320,7 @@ t_conf	parse(int argc, char *argv[])
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:57 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:08:27 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:15:24 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,23 +337,18 @@ t_conf	parse(int argc, char *argv[])
  */
 void	*_philo_routine(void *arg)
 {
-	t_app		*app;
-	uint32_t	meals;
+	t_philo		*self;
 
-	meals = 0;
-	app = (t_app *)arg;
-	while (meals < app->conf.limit && interval(*app->start) < app->conf.ttd)
+	self = (t_philo *) arg;
+	printf("meals = %u\n limit = %u\n", self->meals, self->app->conf.limit);
+	while ((self->meals < self->app->conf.limit))
 	{
-		safe_print(0, 0, *app);
-		usleep(100);
-		safe_print(1, 0, *app);
-		usleep(100);
-		safe_print(2, 0, *app);
-		usleep(100);
-		safe_print(3, 0, *app);
-		usleep(100);
-		safe_print(4, 0, *app);
-		meals++;
+		safe_print(self->id, 0, *self->app);
+		safe_print(self->id, 1, *self->app);
+		safe_print(self->id, 2, *self->app);
+		safe_print(self->id, 3, *self->app);
+		safe_print(self->id, 4, *self->app);
+		self->meals++;
 	}
 	return (NULL);
 }
@@ -363,7 +360,7 @@ void	*_philo_routine(void *arg)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/23 12:58:20 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:13:35 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,13 +389,13 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 		printf("is sleeping");
 	else if (action == 4)
 		printf("has died");
-	printf("/n");
+	printf("\n");
 }
 
 void	safe_print(int philosopher, int action, t_app app)
 {
 	pthread_mutex_lock(&app.print);
-	print_state(philosopher, action, *app.start);
+	print_state(philosopher, action, app.start);
 	pthread_mutex_unlock(&app.print);
 }
 /* ************************************************************************** */
@@ -409,7 +406,7 @@ void	safe_print(int philosopher, int action, t_app app)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:10:33 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:06:22 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 13:05:21 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +423,7 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 	i = 0;
 	while (i < n)
 	{
-		printf("forks[%i] !=0\n", i);
+		printf("mutex[%i] !=0\n", i);
 		if (pthread_mutex_init(&r[i], NULL) != 0)
 		{
 			free(r);
@@ -444,32 +441,43 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:07:15 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:07:30 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-/*
-	spawn_threads
-	creates a thread array and initializes all of it's components
-*/
-pthread_t	*spawn_threads(t_app app)
+void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 {
-	pthread_t	*r;
-	t_philo		*philos;
+	philo->id = i;
+	philo->app = app;
+	philo->meals = 0;
+	philo->last_meal = app->start;
+	philo->fork_r = &app->forks[i];
+	philo->fork_l = &app->forks[(i + 1) % app->conf.n];
+}
+
+/*
+ * reates a thread array and initializes all of it's components
+*/
+t_philo	*spawn_threads(t_app *app)
+{
+	t_philo		*r;
 	uint32_t	i;
 
 	i = 0;
-	r = malloc(sizeof(pthread_t) * (app.conf.n));
+	r = malloc(sizeof(t_philo) * (app->conf.n));
 	if (!r)
 		return (NULL);
-	philos = malloc(sizeof(t_philo) * (app.conf.n));
-	if (!philos)
-		return (NULL);
-	while (i < app.conf.n)
+	while (i < app->conf.n)
 	{
-		pthread_create(&r[i], NULL, _philo_routine, &app);
+		set_philo(i, &r[i], app);
+		if (pthread_create(&r[i].thread, NULL, _philo_routine, &r[i]) != 0)
+		{
+			free(r);
+			return (NULL);
+		}
+		printf("hilo[i] CREADO\n");
 		i++;
 	}
 	return (r);
@@ -495,6 +503,6 @@ t_app	unify(t_conf *conf, pthread_mutex_t *forks)
 	app.conf = *conf;
 	app.forks = forks;
 	pthread_mutex_init(&app.print, NULL);
-	gettimeofday(app.start, NULL);
+	gettimeofday(&app.start, NULL);
 	return (app);
 }

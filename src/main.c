@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 14:04:41 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:05:29 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int argc, char *argv[])
 	uint32_t		i;
 	t_conf			conf;
 	t_app			app;
-	pthread_t		*threads;
+	t_philo			*philos;
 	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
@@ -42,8 +42,8 @@ int	main(int argc, char *argv[])
 	if (forks == NULL)
 		return (1);
 	app = unify(&conf, forks);
-	threads = spawn_threads(&app);
-	if (!threads)
+	philos = spawn_threads(&app);
+	if (!philos)
 	{
 		free(forks);
 		return (1);
@@ -51,10 +51,10 @@ int	main(int argc, char *argv[])
 	i = 0;
 	while (i < conf.n)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
-	free(threads);
+	free(philos);
 	free(forks);
 	return (0);
 }
