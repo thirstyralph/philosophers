@@ -1,46 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:57 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/28 11:41:05 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:08:10 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	take_forks(int fork_l, int fork_r)
-{
-	mutex_lock(&forks[fork_l]);
-	safe_print(
-	mutex_lock(&forks[fork_l]);
-}
 /*
- *	casts argument to t_app 
- * eat
- * 		take(mutex_lock) two forks
- * 		eat(sleep for x time)
- * 		drop (mutex_unlock) the forks)
- * sleep
- * think
  */
-void	*_philo_routine(void *arg)
+void	*philo_routine(void *arg)
 {
-	t_app		*app;
-	uint32_t	meals;
+	t_philo		*self;
+	int			stage;
 
-	meals = 0;
-	app = (t_app *)arg;
-	while (meals < app->conf.limit && interval(*app->start) < app->conf.ttd)
+	stage = 0;
+	self = (t_philo *) arg;
+	while ((self->meals < self->app->conf.limit) && self->life)
 	{
-		safe_print(0, 0, *app);
-		safe_print(1, 0, *app);
-		safe_print(2, 0, *app);
-		safe_print(3, 0, *app);
-		safe_print(4, 0, *app);
+		stage = life_cycle(self, stage);
+		self->meals++;
+	}
+	return (NULL);
+}
+
+/*
+ * routine for the monitor thread
+ * it constantly checks the last time each philosopher ate, if it was
+ * longer than ttd ms ago, changes it's life value to 0
+ */
+void	*monitor_routine(void *arg)
+{
+	uint32_t	i;
+	t_philo		*philos;
+	t_app		*app;
+
+	philos = (t_philo *)arg;
+	app = philos[0].app;
+	i = 0;
+	while (i < app->conf.n)
+	{
+		hunger(*app, philos[i].last_meal, &philos[i].life, (int)i);
+		i++;
 	}
 	return (NULL);
 }

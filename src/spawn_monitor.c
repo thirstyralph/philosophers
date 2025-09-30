@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   spawn_forks.c                                      :+:      :+:    :+:   */
+/*   spawn_monitor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/17 19:10:33 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/23 11:49:20 by ranavarr         ###   ########.fr       */
+/*   Created: 2025/09/30 11:16:53 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/09/30 16:58:09 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-pthread_mutex_t	*spawn_forks(uint32_t n)
+void	hunger(t_app app, struct timeval last_meal, int *life, int id)
 {
-	uint32_t		i;
-	pthread_mutex_t	*r;
-
-	r = malloc(sizeof(pthread_mutex_t) * n + 1);
-	if (!r)
-		return (NULL);
-	i = 0;
-	while (i <= n)
+	if (interval(last_meal) >= app.conf.ttd)
 	{
-		if (pthread_mutex_init(&r[i], NULL) != 0)
-		{
-			free(r);
-			return (NULL);
-		}
-		i++;
+		printf("%d has died\n", id);
+		*life = 0;
 	}
-	return (r);
 }
 
+pthread_t	spawn_monitor(t_philo *philos)
+{
+	pthread_t	monitor;
+
+	pthread_create(&monitor, NULL, monitor_routine, philos);
+	return (monitor);
+}

@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forks.c                                            :+:      :+:    :+:   */
+/*   active_sleep.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/17 18:18:09 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/17 18:18:19 by ranavarr         ###   ########.fr       */
+/*   Created: 2025/09/30 12:50:34 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/09/30 15:53:26 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-pthread_mutex_t	*init_forks(uint32_t n)
+int	active_sleep(int *life, uint32_t time)
 {
-	uint32_t		i;
-	pthread_mutex_t	*r;
+	struct timeval	start;
 
-	i = 0;
-	r = malloc(sizeof(pthread_mutex_t) * n);
-	if (!r)
-		return (NULL);
-	while (i < n)
+	gettimeofday(&start, NULL);
+	while (interval(start) < time && life)
 	{
-		if (pthread_mutex_init(&r[i], NULL) != 0)
-		{
-			while (i > 0)
-				pthread_mutex_destroy(&r[--i]);
-			free(r);
-			return (NULL);
-		}
-		i++;
+		if (usleep(10) != 0)
+			return (-1);
 	}
-	return (r);
+	return (0);
 }

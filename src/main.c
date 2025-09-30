@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:05:29 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 16:35:50 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ int	main(int argc, char *argv[])
 	t_conf			conf;
 	t_app			app;
 	t_philo			*philos;
-	pthread_mutex_t	*forks;
+	pthread_t		monitor;
+	t_fork			*forks;
 
 	conf = parse(argc, argv);
 	print_conf(conf);
@@ -48,12 +49,14 @@ int	main(int argc, char *argv[])
 		free(forks);
 		return (1);
 	}
+	monitor = spawn_monitor(philos);
 	i = 0;
 	while (i < conf.n)
 	{
 		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
+	pthread_join(monitor, NULL);
 	free(philos);
 	free(forks);
 	return (0);

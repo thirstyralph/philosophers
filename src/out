@@ -1,6 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+/*   active_sleep.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/30 12:50:34 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/09/30 15:53:26 by ranavarr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../philo.h"
+
+int	active_sleep(int *life, uint32_t time)
+{
+	struct timeval	start;
+
+	gettimeofday(&start, NULL);
+	while (interval(start) < time && life)
+	{
+		if (usleep(10) != 0)
+			return (-1);
+	}
+	return (0);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
 /*   ft_atod.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
@@ -142,12 +168,76 @@ int	ft_strlen(const char *s)
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+/*   life_cycle.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/30 12:47:20 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/09/30 13:23:31 by ranavarr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include "../philo.h"
+
+int	life_cycle(t_philo *self, int stage)
+{
+	if (stage == 0)
+	{
+		safe_print(self->id, 0, self->app);
+	}
+	else if (stage == 1)
+	{
+		safe_print(self->id, 1, self->app);
+		gettimeofday(&self->last_meal, NULL);
+	}
+	else if (stage == 2)
+	{
+		safe_print(self->id, 2, self->app);
+	}
+	else if (stage == 3)
+	{
+		safe_print(self->id, 3, self->app);
+	}
+	return ((stage + 1) % 4);
+}
+
+/*
+ * Function: eat
+ * every philospher takes two forks, the last one takes the left one 
+ * then the right one, every other one does it the other way around.
+ * the forks get locked
+ * last_meal gets set to current time
+ * active sleep during tts miliseconds
+ * PROBLEM:
+ * the philosopher may die while waiting for the fork  to be unlocked
+ */
+void	eat(t_philo *self)
+{
+	if (self->id == self->app->conf.n - 1)
+	{
+		pthread_mutex_lock(self->fork_l);
+		safe_print(self->id, 0, self->app);
+		pthread_mutex_lock(self->fork_r);
+		safe_print(self->id, 0, self->app);
+	}
+	else
+	{
+		pthread_mutex_lock(self->fork_r);
+		safe_print(self->id, 0, self->app);
+		pthread_mutex_lock(self->fork_l);
+		safe_print(self->id, 0, self->app);
+	}
+	gettimeofday(&self->last_meal, NULL);
+	active_sleep(&self->life, self->app->conf.tts);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:05:29 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 16:35:50 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +265,8 @@ int	main(int argc, char *argv[])
 	t_conf			conf;
 	t_app			app;
 	t_philo			*philos;
-	pthread_mutex_t	*forks;
+	pthread_t		monitor;
+	t_fork			*forks;
 
 	conf = parse(argc, argv);
 	print_conf(conf);
@@ -189,12 +280,14 @@ int	main(int argc, char *argv[])
 		free(forks);
 		return (1);
 	}
+	monitor = spawn_monitor(philos);
 	i = 0;
 	while (i < conf.n)
 	{
 		pthread_join(philos[i].thread, NULL);
 		i++;
 	}
+	pthread_join(monitor, NULL);
 	free(philos);
 	free(forks);
 	return (0);
@@ -315,40 +408,52 @@ t_conf	parse(int argc, char *argv[])
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:57 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:15:24 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:08:10 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
 /*
- *	casts argument to t_app 
- * eat
- * 		take(mutex_lock) two forks
- * 		eat(sleep for x time)
- * 		drop (mutex_unlock) the forks)
- * sleep
- * think
  */
-void	*_philo_routine(void *arg)
+void	*philo_routine(void *arg)
 {
 	t_philo		*self;
+	int			stage;
 
+	stage = 0;
 	self = (t_philo *) arg;
-	printf("meals = %u\n limit = %u\n", self->meals, self->app->conf.limit);
-	while ((self->meals < self->app->conf.limit))
+	while ((self->meals < self->app->conf.limit) && self->life)
 	{
-		safe_print(self->id, 0, *self->app);
-		safe_print(self->id, 1, *self->app);
-		safe_print(self->id, 2, *self->app);
-		safe_print(self->id, 3, *self->app);
-		safe_print(self->id, 4, *self->app);
+		stage = life_cycle(self, stage);
 		self->meals++;
+	}
+	return (NULL);
+}
+
+/*
+ * routine for the monitor thread
+ * it constantly checks the last time each philosopher ate, if it was
+ * longer than ttd ms ago, changes it's life value to 0
+ */
+void	*monitor_routine(void *arg)
+{
+	uint32_t	i;
+	t_philo		*philos;
+	t_app		*app;
+
+	philos = (t_philo *)arg;
+	app = philos[0].app;
+	i = 0;
+	while (i < app->conf.n)
+	{
+		hunger(*app, philos[i].last_meal, &philos[i].life, (int)i);
+		i++;
 	}
 	return (NULL);
 }
@@ -360,7 +465,7 @@ void	*_philo_routine(void *arg)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:13:35 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/29 14:19:35 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -392,11 +497,11 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 	printf("\n");
 }
 
-void	safe_print(int philosopher, int action, t_app app)
+void	safe_print(int philosopher, int action, t_app *app)
 {
-	pthread_mutex_lock(&app.print);
-	print_state(philosopher, action, app.start);
-	pthread_mutex_unlock(&app.print);
+	pthread_mutex_lock(&app->print);
+	print_state(philosopher, action, app->start);
+	pthread_mutex_unlock(&app->print);
 }
 /* ************************************************************************** */
 /*                                                                            */
@@ -406,16 +511,16 @@ void	safe_print(int philosopher, int action, t_app app)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:10:33 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 13:05:21 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 13:54:41 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-pthread_mutex_t	*spawn_forks(uint32_t n)
+t_fork	*spawn_forks(uint32_t n)
 {
 	uint32_t		i;
-	pthread_mutex_t	*r;
+	t_fork			*r;
 
 	r = malloc(sizeof(pthread_mutex_t) * n);
 	if (!r)
@@ -423,8 +528,8 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 	i = 0;
 	while (i < n)
 	{
-		printf("mutex[%i] !=0\n", i);
-		if (pthread_mutex_init(&r[i], NULL) != 0)
+		r[i].ready = 1;
+		if (pthread_mutex_init(&r[i].fork, NULL) != 0)
 		{
 			free(r);
 			return (NULL);
@@ -436,12 +541,42 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
+/*   spawn_monitor.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/30 11:16:53 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/09/30 12:43:45 by ranavarr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../philo.h"
+
+void	hunger(t_app app, struct timeval last_meal, int *life, int id)
+{
+	if (interval(last_meal) >= app.conf.ttd)
+	{
+		printf("%d has died\n", id);
+		life = 0;
+	}
+}
+
+pthread_t	spawn_monitor(t_philo *philos)
+{
+	pthread_t	monitor;
+
+	pthread_create(&monitor, NULL, monitor_routine, philos);
+	return (monitor);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
 /*   spawn_threads.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:07:30 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 16:38:01 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,11 +585,12 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 {
 	philo->id = i;
+	philo->life = 1;
 	philo->app = app;
 	philo->meals = 0;
 	philo->last_meal = app->start;
-	philo->fork_r = &app->forks[i];
-	philo->fork_l = &app->forks[(i + 1) % app->conf.n];
+	philo->fork_r = &app->forks[i].fork;
+	philo->fork_l = &app->forks[(i + 1) % app->conf.n].fork;
 }
 
 /*
@@ -466,18 +602,18 @@ t_philo	*spawn_threads(t_app *app)
 	uint32_t	i;
 
 	i = 0;
+	printf("n es esto %d\n", app->conf.n);
 	r = malloc(sizeof(t_philo) * (app->conf.n));
 	if (!r)
 		return (NULL);
 	while (i < app->conf.n)
 	{
 		set_philo(i, &r[i], app);
-		if (pthread_create(&r[i].thread, NULL, _philo_routine, &r[i]) != 0)
+		if (pthread_create(&r[i].thread, NULL, philo_routine, &r[i]) != 0)
 		{
 			free(r);
 			return (NULL);
 		}
-		printf("hilo[i] CREADO\n");
 		i++;
 	}
 	return (r);
@@ -490,13 +626,13 @@ t_philo	*spawn_threads(t_app *app)
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 20:24:36 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/23 13:17:13 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/09/30 15:56:10 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-t_app	unify(t_conf *conf, pthread_mutex_t *forks)
+t_app	unify(t_conf *conf, t_fork *forks)
 {
 	t_app			app;
 
@@ -505,4 +641,8 @@ t_app	unify(t_conf *conf, pthread_mutex_t *forks)
 	pthread_mutex_init(&app.print, NULL);
 	gettimeofday(&app.start, NULL);
 	return (app);
+}
+
+void	take_fork(void)
+{
 }
