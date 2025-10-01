@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/30 16:38:49 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/01 17:16:59 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,11 @@ typedef struct s_conf
 	uint32_t	limit;	// max number of times for the philosophers to eat
 }	t_conf;
 
-typedef struct s_fork
-{
-	pthread_mutex_t	fork;
-	int				ready;
-}	t_fork;
-
 typedef struct s_app
 {
+	int				*life;
 	t_conf			conf;
-	t_fork			*forks;	
+	pthread_mutex_t	*forks;
 	struct timeval	start;
 	pthread_mutex_t	print;
 }	t_app;
@@ -52,7 +47,6 @@ typedef struct s_philo
 	pthread_t		thread;
 	struct timeval	last_meal;
 	uint32_t		meals;
-	int				life;
 	uint32_t		id;
 }	t_philo;
 
@@ -73,20 +67,22 @@ void					*monitor_routine(void *arg);
 //spawn_threads.c
 t_philo					*spawn_threads(t_app *app);
 //spawn_forks.c
-t_fork					*spawn_forks(uint32_t n);
+pthread_mutex_t			*spawn_forks(uint32_t n);
 //forks.c
-pthread_mutex_t			*init_forks(uint32_t n);
+pthread_mutex_t			*inipthread_mutex_ts(uint32_t n);
 //utils.c
-t_app					unify(t_conf *conf, t_fork *forks);
+t_app					unify(t_conf *conf, pthread_mutex_t *forks);
+void					kill_all(t_philo *philos);
 //main.c
 long unsigned			interval(struct timeval start);
 //monitor.c
-void					hunger(t_app app, struct timeval last_meal,
-							int *life, int id);
+int						hunger(t_app app, struct timeval last_meal);
 pthread_t				spawn_monitor(t_philo *philos);
 //active_sleep.c
 int						active_sleep(int *life, uint32_t time);
 //life_cycle.c
 int						life_cycle(t_philo *self, int stage);
+//actions.c
+void					eat(t_philo *self);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/30 16:35:50 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/01 17:04:02 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ void	print_conf(t_conf conf)
 	printf("number of times the philos must eat = %u\n", conf.limit);
 }
 
+/*
+ * Parse, se devuelve conf struct
+ * Se inician los mutex, de print y tenedores
+ * se inician los hilos, filosofos y monitor
+ * Al morir un filosofo, ocurrir algun error o llegar al limite
+ * Se liberan todas las arrays (filosofos y tenedores)
+ * return (0);
+ */
 int	main(int argc, char *argv[])
 {
 	uint32_t		i;
@@ -35,7 +43,7 @@ int	main(int argc, char *argv[])
 	t_app			app;
 	t_philo			*philos;
 	pthread_t		monitor;
-	t_fork			*forks;
+	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
 	print_conf(conf);
@@ -61,24 +69,3 @@ int	main(int argc, char *argv[])
 	free(forks);
 	return (0);
 }
-/*
- #	must take:
-	- number_of_philosophers
-	- time_to_die
-	- time_to_eat
-	- time_to_sleep
-	- number_of_times_each_philosopher_must_eat
-	Each philosopher can use his own fork and the one to his left.
-	so philosoper 0 can use fork 0 and top - 1, philo 1 can use forks 1, and 0
-# How I think I will make it:
-		- I start each philosopher naming it with it's position
-		- I create a fork for each philosopher, and put them in an array,
-			when it is time for philosophers to eat, they check if forks are
-			available for them and if so they lock them with mutex and use them
-int	main(int argc, char *argv[])
-
-{
-	
-	return (0);
-}
-*/

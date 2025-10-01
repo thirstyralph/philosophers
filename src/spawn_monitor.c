@@ -6,19 +6,19 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 11:16:53 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/30 16:58:09 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:12:09 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	hunger(t_app app, struct timeval last_meal, int *life, int id)
+int	hunger(t_app app, struct timeval last_meal)
 {
 	if (interval(last_meal) >= app.conf.ttd)
 	{
-		printf("%d has died\n", id);
-		*life = 0;
+		return (1);
 	}
+	return (0);
 }
 
 pthread_t	spawn_monitor(t_philo *philos)

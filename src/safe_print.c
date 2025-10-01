@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/09/29 14:19:35 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:55:40 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 	printf("%lu %d ", interval(start), philosopher);
 	if (action == 0)
 		printf("has taken a fork");
-	if (action == 1)
+	else if (action == 1)
 		printf("is eating");
 	else if (action == 2)
 		printf("is thinking");
