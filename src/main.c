@@ -6,27 +6,11 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/01 17:04:02 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:45:54 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-/*
-void	notification(uint32_t philo, uint32_t action)
-{
-	//timestamp_in_ms philo has done this action or another;
-
-}
-*/
-void	print_conf(t_conf conf)
-{
-	printf("number of philosophers = %u\n", conf.n);
-	printf("time to die = %u\n", conf.ttd);
-	printf("time to eat  = %u\n", conf.tte);
-	printf("time to sleep  = %u\n", conf.tts);
-	printf("number of times the philos must eat = %u\n", conf.limit);
-}
 
 /*
  * Parse, se devuelve conf struct
@@ -46,8 +30,8 @@ int	main(int argc, char *argv[])
 	pthread_mutex_t	*forks;
 
 	conf = parse(argc, argv);
-	print_conf(conf);
 	forks = spawn_forks(conf.n);
+	//aqui lo que deberia de hacer es declarar todos los mutex a la vez
 	if (forks == NULL)
 		return (1);
 	app = unify(&conf, forks);
@@ -57,7 +41,7 @@ int	main(int argc, char *argv[])
 		free(forks);
 		return (1);
 	}
-	monitor = spawn_monitor(philos);
+	monitor = spawn_monitor(&philos);
 	i = 0;
 	while (i < conf.n)
 	{
@@ -65,7 +49,7 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	pthread_join(monitor, NULL);
+	destroy_forks(&app);
 	free(philos);
-	free(forks);
 	return (0);
 }

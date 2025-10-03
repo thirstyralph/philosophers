@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 12:47:20 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/01 17:18:50 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/02 17:22:05 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../philo.h"
@@ -20,20 +20,16 @@
  */
 int	life_cycle(t_philo *self, int stage)
 {
-	if (self->app->life)
+	if (self->app->life == 1)
 	{
-		if (stage == 0)
+		if (stage == 0 && self->app->life == 1)
 		{
 			eat(self);
 		}
-		else if (stage == 1)
+		else if (stage == 1 && self->app->life == 1)
 		{
-			safe_print(self->id, 1, self->app);
-		}
-		else if (stage == 2)
-		{
-			safe_print(self->id, 2, self->app);
+			philo_sleep(self);
 		}
 	}
-	return ((stage + 1) % 3);
+	return ((stage + 1) % 2);
 }

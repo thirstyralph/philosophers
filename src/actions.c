@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/01 17:18:05 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/03 15:26:20 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 void	take_fork(t_app *app, uint32_t id, pthread_mutex_t *fork)
 {
-	pthread_mutex_lock(fork);
-	safe_print(id, 0, app);
+	if (app->life == 1)
+	{
+		pthread_mutex_lock(fork);
+		safe_print(id, 0, app);
+	}
 }
 
 void	drop_fork(pthread_mutex_t *fork)
@@ -35,18 +38,27 @@ void	drop_fork(pthread_mutex_t *fork)
  */
 void	eat(t_philo *self)
 {
-	if (self->id == self->app->conf.n - 1)
+	if (self->app->life == 1)
 	{
-		take_fork(self->app, self->id, self->fork_l);
-		take_fork(self->app, self->id, self->fork_r);
-	}
-	else
-	{
-		take_fork(self->app, self->id, self->fork_r);
+		safe_print(self->id, 3, self->app);
 		take_fork(self->app, self->id, self->fork_l);
 	}
-	gettimeofday(&self->last_meal, NULL);
-	active_sleep(self->app->life, self->app->conf.tts);
+	if (self->app->life == 1)
+	{
+		take_fork(self->app, self->id, self->fork_r);
+		gettimeofday(&self->last_meal, NULL);
+	}
+	if (self->app->life == 1)
+	{
+		safe_print(self->id, 1, self->app);
+		active_sleep(&self->app->life, self->app->conf.tte);
+	}
 	drop_fork(self->fork_l);
 	drop_fork(self->fork_r);
+}
+
+void	philo_sleep(t_philo *self)
+{
+	safe_print(self->id, 3, self->app);
+	active_sleep(&self->app->life, self->app->conf.tts);
 }

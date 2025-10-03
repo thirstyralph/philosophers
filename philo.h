@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/01 17:16:59 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:45:33 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_conf
 
 typedef struct s_app
 {
-	int				*life;
+	int				life;
 	t_conf			conf;
 	pthread_mutex_t	*forks;
 	struct timeval	start;
@@ -48,6 +48,7 @@ typedef struct s_philo
 	struct timeval	last_meal;
 	uint32_t		meals;
 	uint32_t		id;
+
 }	t_philo;
 
 //parse.c
@@ -72,17 +73,19 @@ pthread_mutex_t			*spawn_forks(uint32_t n);
 pthread_mutex_t			*inipthread_mutex_ts(uint32_t n);
 //utils.c
 t_app					unify(t_conf *conf, pthread_mutex_t *forks);
-void					kill_all(t_philo *philos);
+void					destroy_forks(t_app *app);
+
 //main.c
 long unsigned			interval(struct timeval start);
 //monitor.c
 int						hunger(t_app app, struct timeval last_meal);
-pthread_t				spawn_monitor(t_philo *philos);
+pthread_t				spawn_monitor(t_philo **philos);
 //active_sleep.c
 int						active_sleep(int *life, uint32_t time);
 //life_cycle.c
 int						life_cycle(t_philo *self, int stage);
 //actions.c
 void					eat(t_philo *self);
+void					philo_sleep(t_philo *self);
 
 #endif

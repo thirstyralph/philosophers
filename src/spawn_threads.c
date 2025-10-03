@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/01 17:13:06 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:45:06 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 {
 	philo->id = i;
-	philo->life = 1;
 	philo->app = app;
 	philo->meals = 0;
 	philo->last_meal = app->start;
@@ -32,7 +31,6 @@ t_philo	*spawn_threads(t_app *app)
 	uint32_t	i;
 
 	i = 0;
-	printf("n es esto %d\n", app->conf.n);
 	r = malloc(sizeof(t_philo) * (app->conf.n));
 	if (!r)
 		return (NULL);
