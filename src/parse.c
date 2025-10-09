@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/02 18:11:33 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/08 13:24:26 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ t_conf	parse(int argc, char *argv[])
 
 	if ((argc == 5 || argc == 6) && validate_len_and_chars(argc, argv))
 	{
-		r.n = ft_atoi(argv[1]);
-		r.ttd = ft_atoi(argv[2]) * 1000;
-		r.tte = ft_atoi(argv[3]) * 1000;
-		r.tts = ft_atoi(argv[4]) * 1000;
+		r.n = (long unsigned int)ft_atoi(argv[1]);
+		r.ttd = (long unsigned int)ft_atoi(argv[2]);
+		r.tte = (long unsigned int)ft_atoi(argv[3]);
+		r.tts = (long unsigned int)ft_atoi(argv[4]);
 		if (argc == 6)
 			r.limit = ft_atoi(argv[5]);
 		else

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/03 14:45:54 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:18:29 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	main(int argc, char *argv[])
 
 	conf = parse(argc, argv);
 	forks = spawn_forks(conf.n);
-	//aqui lo que deberia de hacer es declarar todos los mutex a la vez
 	if (forks == NULL)
 		return (1);
 	app = unify(&conf, forks);

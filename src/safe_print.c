@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/02 20:31:13 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/08 13:25:47 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ inline long unsigned	interval(struct timeval start)
 	struct timeval	end;
 
 	zero = ((start.tv_sec * 1000) + (start.tv_usec / 1000));
+//	printf("sec = %lu ~ usec = %lu\n", start.tv_sec, start.tv_usec);
+//	printf("sec = %lu ~ usec = %lu\n", start.tv_sec * 1000, start.tv_usec / 1000);
+//	printf("en total = %lu\n", (start.tv_sec * 1000) + (start.tv_usec / 1000));
 	gettimeofday(&end, NULL);
 	return (((end.tv_sec * 1000) + (end.tv_usec / 1000)) - zero);
 }
@@ -33,6 +36,7 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 		printf("is sleeping");
 	else if (action == 3)
 		printf("is thinking");
+	printf("\n");
 }
 
 void	safe_print(int philosopher, int action, t_app *app)

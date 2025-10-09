@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 17:27:27 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/02 17:00:46 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/08 18:16:03 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	*philo_routine(void *arg)
 
 	stage = 0;
 	self = (t_philo *) arg;
-	if (self->app->conf.limit == 0)
+	if (self->app->conf->limit == 0)
 	{
-		while (self->app->life == 1)
+		while (get_life(&(self->app->life)))
 		{
 			stage = life_cycle(self, stage);
 			self->meals++;
@@ -29,7 +29,7 @@ void	*philo_routine(void *arg)
 	}
 	else
 	{
-		while ((self->meals < self->app->conf.limit) && self->app->life == 1)
+		while ((self->meals < self->app->conf->limit) && &(self->app->life))
 		{
 			stage = life_cycle(self, stage);
 			self->meals++;
@@ -46,17 +46,20 @@ void	*monitor_routine(void *arg)
 
 	philos = (t_philo *)arg;
 	app = philos[0].app;
-	while (app->life)
+	while (get_life(&(app->life)))
 	{
 		i = 0;
-		while (i < app->conf.n && app->life == 1)
+		while ((i < (*app).conf->n) && get_life(&(app->life)))
 		{
 			if (hunger(*app, philos[i].last_meal))
 			{
 				safe_print(i, 4, app);
-				app->life = 0;
+				pthread_mutex_lock(&(app->life.lock));
+				app->life.state = 0;
+				pthread_mutex_unlock(&(app->life.lock));
 			}
 			i++;
+			usleep(1000);
 		}
 	}
 	return (NULL);

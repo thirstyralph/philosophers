@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/03 14:45:06 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:38:55 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@ void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 	philo->id = i;
 	philo->app = app;
 	philo->meals = 0;
-	philo->last_meal = app->start;
-	philo->fork_r = &app->forks[i];
-	philo->fork_l = &app->forks[(i + 1) % app->conf.n];
+	philo->last_meal.time = app->start;
+	philo->fork_l = &app->forks[i];
+	philo->fork_r = &app->forks[(i + 1) % app->conf.n];
+	pthread_mutex_init(&philo->last_meal.lock, NULL);
 }
 
 /*
