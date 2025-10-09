@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 13:25:47 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 12:49:49 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@ inline long unsigned	interval(struct timeval start)
 	struct timeval	end;
 
 	zero = ((start.tv_sec * 1000) + (start.tv_usec / 1000));
-//	printf("sec = %lu ~ usec = %lu\n", start.tv_sec, start.tv_usec);
-//	printf("sec = %lu ~ usec = %lu\n", start.tv_sec * 1000, start.tv_usec / 1000);
-//	printf("en total = %lu\n", (start.tv_sec * 1000) + (start.tv_usec / 1000));
 	gettimeofday(&end, NULL);
 	return (((end.tv_sec * 1000) + (end.tv_usec / 1000)) - zero);
 }
@@ -36,12 +33,19 @@ inline void	print_state(int philosopher, int action, struct timeval start)
 		printf("is sleeping");
 	else if (action == 3)
 		printf("is thinking");
+	else if (action == 4)
+		printf("has died");
+	else
+		printf("something has gone really wrong action = %d\n", action);
 	printf("\n");
 }
 
 void	safe_print(int philosopher, int action, t_app *app)
 {
-	pthread_mutex_lock(&app->print);
-	print_state(philosopher, action, app->start);
-	pthread_mutex_unlock(&app->print);
+	if (get_life(&app->life))
+	{
+		pthread_mutex_lock(&app->print);
+		print_state(philosopher, action, app->start);
+		pthread_mutex_unlock(&app->print);
+	}
 }

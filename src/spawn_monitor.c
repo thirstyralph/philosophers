@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 11:16:53 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 18:15:15 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 10:38:56 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	hunger(t_app app, t_last_meal last_meal)
 	return (r);
 }
 
-pthread_t	spawn_monitor(t_philo **philos)
+pthread_t	spawn_monitor(t_philo *philos)
 {
 	pthread_t	monitor;
 

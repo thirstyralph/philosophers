@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 17:38:55 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 13:21:53 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,16 @@ void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 	philo->app = app;
 	philo->meals = 0;
 	philo->last_meal.time = app->start;
-	philo->fork_l = &app->forks[i];
-	philo->fork_r = &app->forks[(i + 1) % app->conf.n];
+	if (i == app->conf->n - 1)
+	{
+		philo->fork_r = &app->forks[i];
+		philo->fork_l = &app->forks[(i + 1) % app->conf->n];
+	}
+	else
+	{
+		philo->fork_l = &app->forks[i];
+		philo->fork_r = &app->forks[(i + 1) % app->conf->n];
+	}
 	pthread_mutex_init(&philo->last_meal.lock, NULL);
 }
 
@@ -32,10 +40,10 @@ t_philo	*spawn_threads(t_app *app)
 	uint32_t	i;
 
 	i = 0;
-	r = malloc(sizeof(t_philo) * (app->conf.n));
+	r = malloc(sizeof(t_philo) * (app->conf->n));
 	if (!r)
 		return (NULL);
-	while (i < app->conf.n)
+	while (i < app->conf->n)
 	{
 		set_philo(i, &r[i], app);
 		if (pthread_create(&r[i].thread, NULL, philo_routine, &r[i]) != 0)
@@ -43,7 +51,18 @@ t_philo	*spawn_threads(t_app *app)
 			free(r);
 			return (NULL);
 		}
-		i++;
+		i += 2;
+	}
+	i = 1;
+	while (i < app->conf->n)
+	{
+		set_philo(i, &r[i], app);
+		if (pthread_create(&r[i].thread, NULL, philo_routine, &r[i]) != 0)
+		{
+			free(r);
+			return (NULL);
+		}
+		i += 2;
 	}
 	return (r);
 }

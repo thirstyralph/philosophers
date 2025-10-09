@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 17:27:27 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 18:16:03 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 12:47:50 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	*philo_routine(void *arg)
 	}
 	else
 	{
-		while ((self->meals < self->app->conf->limit) && &(self->app->life))
+		while ((self->meals < self->app->conf->limit)
+			&& get_life(&(self->app->life)))
 		{
 			stage = life_cycle(self, stage);
-			self->meals++;
 		}
 	}
 	return (NULL);
@@ -49,9 +49,9 @@ void	*monitor_routine(void *arg)
 	while (get_life(&(app->life)))
 	{
 		i = 0;
-		while ((i < (*app).conf->n) && get_life(&(app->life)))
+		while ((i < (*app).conf->n))
 		{
-			if (hunger(*app, philos[i].last_meal))
+			if (hunger(*app, philos[i].last_meal) && get_life(&(app->life)))
 			{
 				safe_print(i, 4, app);
 				pthread_mutex_lock(&(app->life.lock));
@@ -59,7 +59,6 @@ void	*monitor_routine(void *arg)
 				pthread_mutex_unlock(&(app->life.lock));
 			}
 			i++;
-			usleep(1000);
 		}
 	}
 	return (NULL);

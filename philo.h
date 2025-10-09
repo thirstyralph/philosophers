@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 18:09:01 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 10:38:39 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,14 @@ pthread_mutex_t			*spawn_forks(uint32_t n);
 pthread_mutex_t			*inipthread_mutex_ts(uint32_t n);
 //utils.c
 t_app					unify(t_conf *conf, pthread_mutex_t *forks);
-void					destroy_forks(t_app *app);
+void					destroy_and_free(t_philo *philos);
 int						get_life(t_life_state *life);
 
 //main.c
 long unsigned			interval(struct timeval start);
 //monitor.c
 int						hunger(t_app app, t_last_meal last_meal);
-pthread_t				spawn_monitor(t_philo **philos);
+pthread_t				spawn_monitor(t_philo *philos);
 //active_sleep.c
 int						active_sleep(t_life_state *life,
 							long unsigned int time);

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 17:18:29 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 10:39:33 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int argc, char *argv[])
 		free(forks);
 		return (1);
 	}
-	monitor = spawn_monitor(&philos);
+	monitor = spawn_monitor(philos);
 	i = 0;
 	while (i < conf.n)
 	{
@@ -48,7 +48,6 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	pthread_join(monitor, NULL);
-	destroy_forks(&app);
-	free(philos);
+	destroy_and_free(philos);
 	return (0);
 }

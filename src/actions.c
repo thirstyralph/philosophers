@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/08 18:14:18 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/09 15:53:06 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,41 @@ void	drop_fork(pthread_mutex_t *fork)
  */
 void	eat(t_philo *self)
 {
-	printf("[eat] id = %d ~ life == %d\n", self->id, self->app->life.state);
-	if (get_life(&self->app->life) == 1)
-	{
-		take_fork(self->app, self->id, self->fork_l);
-		if (get_life(&self->app->life) == 1)
+		if (!get_life(&self->app->life))
+				return ;
+		if (self->id % 2 == 0)
 		{
 			take_fork(self->app, self->id, self->fork_r);
+									take_fork(self->app, self->id, self->fork_l);
+										}
+			else
+					{
+								take_fork(self->app, self->id, self->fork_l);
+										take_fork(self->app, self->id, self->fork_r);
+											}
+
+				if (get_life(&self->app->life))
+						{
+									safe_print(self->id, 1, self->app);
+											pthread_mutex_lock(&(self->last_meal.lock));
+													gettimeofday(&(self->last_meal.time), NULL);
+															pthread_mutex_unlock(&(self->last_meal.lock));
+																	active_sleep(&(self->app->life), self->app->conf->tte);
+																			self->meals++;
+																				}
+
+					drop_fork(self->fork_l);
+						drop_fork(self->fork_r);
+}
+/*
+void	eat(t_philo *self)
+{
+	if (get_life(&self->app->life) == 1)
+	{
+		take_fork(self->app, self->id, self->fork_r);
+		if (get_life(&self->app->life) == 1)
+		{
+			take_fork(self->app, self->id, self->fork_l);
 			if (get_life(&self->app->life) == 1)
 			{
 				safe_print(self->id, 1, self->app);
@@ -53,12 +81,13 @@ void	eat(t_philo *self)
 				pthread_mutex_unlock(&(self->last_meal.lock));
 				active_sleep(&(self->app->life), self->app->conf->tte);
 			}
-			drop_fork(self->fork_r);
+			drop_fork(self->fork_l);
 		}
-		drop_fork(self->fork_l);
+		drop_fork(self->fork_r);
+		self->meals++;
 	}
 }
-
+*/
 void	philo_sleep(t_philo *self)
 {
 	safe_print(self->id, 2, self->app);
