@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/09 10:38:39 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:22:22 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_philo
 }	t_philo;
 
 //parse.c
-void					print_usage(void);
+int						print_usage(void);
 t_conf					parse(int argc, char *argv[]);
 //ft_strlen.c
 int						ft_strlen(const char *s);
@@ -100,5 +100,7 @@ int						life_cycle(t_philo *self, int stage);
 //actions.c
 void					eat(t_philo *self);
 void					philo_sleep(t_philo *self);
+//ft_atolu.c
+long unsigned int		ft_atolu(char *str);
 
 #endif
