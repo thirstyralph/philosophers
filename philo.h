@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/11 14:35:01 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/12 20:28:05 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ typedef struct s_life_state
 	int				state;
 	pthread_mutex_t	lock;
 }	t_life_state;
+
+typedef struct s_full_state
+{
+	int				state;
+	pthread_mutex_t	lock;
+}	t_full_state;
 
 typedef struct s_last_meal
 {
@@ -58,6 +64,7 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_r;
 	pthread_t		thread;
 	t_last_meal		last_meal;
+	t_full_state	full;
 	uint32_t		meals;
 	uint32_t		id;
 }	t_philo;
@@ -86,11 +93,12 @@ pthread_mutex_t			*inipthread_mutex_ts(uint32_t n);
 t_app					unify(t_conf *conf, pthread_mutex_t *forks);
 void					destroy_and_free(t_philo *philos);
 int						get_life(t_life_state *life);
-
+int						is_full(t_full_state *full);
+int						check_all_full(t_philo *philos);
 //main.c
 long unsigned			interval(struct timeval start);
 //monitor.c
-int						hunger(t_app app, t_last_meal last_meal);
+int						hunger(t_app app, t_last_meal *last_meal);
 pthread_t				spawn_monitor(t_philo *philos);
 //active_sleep.c
 int						active_sleep(t_life_state *life,

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/11 14:20:52 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/12 20:26:55 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 void	take_fork(t_app *app, uint32_t id, pthread_mutex_t *fork)
 {
-	if (get_life(&app->life))
-	{
-		pthread_mutex_lock(fork);
-		safe_print(id, 0, app);
-	}
+	pthread_mutex_lock(fork);
+	safe_print(id, 0, app);
 }
 
 void	drop_fork(pthread_mutex_t *fork)
@@ -34,12 +31,14 @@ void	drop_fork(pthread_mutex_t *fork)
  * last_meal gets set to current time
  * active sleep during tts miliseconds
  * PROBLEM:
- * the philosopher may die while waiting for the fork  to be unlocked
+ * take_fork only works while life == 1 so if that's not true, we 
+ * unlock an unlock mutex...
  */
 void	eat(t_philo *self)
 {
 	if (!get_life(&self->app->life))
 		return ;
+	safe_print(self->id, 3, self->app);
 	if (self->id % 2 == 0)
 	{
 		take_fork(self->app, self->id, self->fork_r);
@@ -60,7 +59,9 @@ void	eat(t_philo *self)
 	}
 	drop_fork(self->fork_l);
 	drop_fork(self->fork_r);
+	pthread_mutex_lock(&self->meals_lock);
 	self->meals++;
+	pthread_mutex_unlock(&self->meals_lock);
 }
 
 /*

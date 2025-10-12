@@ -1,6 +1,6 @@
 NAME	:= philo
 CC		:= cc
-CFLAGS	:= -Wextra -Wall -Werror -g
+CFLAGS	:= -O0 -Wextra -Wall -Werror -g
 SRC_DIR = src
 OBJ_DIR = obj
 

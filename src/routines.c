@@ -6,7 +6,7 @@
 /*   By: ranavarr <ranavarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 17:27:27 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/11 20:46:25 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/12 20:28:29 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,15 @@ void	*philo_routine(void *arg)
 
 	stage = 0;
 	self = (t_philo *) arg;
-	if (self->app->conf->limit == 0)
+	while (get_life(&(self->app->life)))
 	{
-		while (get_life(&(self->app->life)))
+		if (self->meals >= self->app->conf->limit && !is_full(&self->full))
 		{
-			stage = life_cycle(self, stage);
+			pthread_mutex_lock(&self->full.lock);
+			self->full.state = 1;
+			pthread_mutex_unlock(&self->full.lock);
 		}
-	}
-	else
-	{
-		while ((self->meals < self->app->conf->limit) // no deberian parar cuando ya han comido, o eso dice Pablo, tyo que se
-			&& get_life(&(self->app->life)))
-		{
-			stage = life_cycle(self, stage);
-		}
-		printf("toy lleno\n"); //Aqui en vez de esto, que modifique una flag de "full" y en la rutina del monitor que se lea
+		stage = life_cycle(self, stage);
 	}
 	return (NULL);
 }
@@ -49,12 +43,18 @@ void	*monitor_routine(void *arg)
 	while (get_life(&(app->life)))
 	{
 		i = 0;
-		while ((i < (*app).conf->n))
+		while ((i < (*app).conf->n) && get_life(&(app->life)))
 		{
-			if (hunger(*app, philos[i].last_meal) && get_life(&(app->life) && ))
+			if (hunger(*app, &philos[i].last_meal) && get_life(&(app->life)))
 			{
 				safe_print(i, 4, app);
-				printf("Voy a intentar lockear life\n");
+				pthread_mutex_lock(&(app->life.lock));
+				app->life.state = 0;
+				pthread_mutex_unlock(&(app->life.lock));
+			}
+			if (app->conf->limit != 0 && check_all_full(philos)
+				&& get_life(&(app->life)))
+			{
 				pthread_mutex_lock(&(app->life.lock));
 				app->life.state = 0;
 				pthread_mutex_unlock(&(app->life.lock));
@@ -62,6 +62,5 @@ void	*monitor_routine(void *arg)
 			i++;
 		}
 	}
-	printf("Fin del monitor\n");
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 20:24:36 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/09 10:12:30 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/12 14:20:07 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,30 @@ int	get_life(t_life_state *life)
 	r = life->state;
 	pthread_mutex_unlock(&life->lock);
 	return (r);
+}
+
+int	is_full(t_full_state *full)
+{
+	int	r;
+
+	pthread_mutex_lock(&full->lock);
+	r = full->state;
+	pthread_mutex_unlock(&full->lock);
+	return (r);
+}
+
+int	check_all_full(t_philo *philos)
+{
+	uint32_t	i;
+	uint32_t	max;
+
+	i = 0;
+	max = philos[0].app->conf->n;
+	while (i < max)
+	{
+		if (!is_full(&philos[i].full))
+			return (0);
+		i++;
+	}
+	return (1);
 }
