@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/12 20:28:05 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:30:38 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int						check_all_full(t_philo *philos);
 //main.c
 long unsigned			interval(struct timeval start);
 //monitor.c
-int						hunger(t_app app, t_last_meal *last_meal);
+int						hunger(t_app *app, t_last_meal *last_meal);
 pthread_t				spawn_monitor(t_philo *philos);
 //active_sleep.c
 int						active_sleep(t_life_state *life,

@@ -6,13 +6,13 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 11:16:53 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/12 16:55:41 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:30:26 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	hunger(t_app app, t_last_meal *last_meal)
+int	hunger(t_app *app, t_last_meal *last_meal)
 {
 	int			r;	
 	t_last_meal	last_copy;
@@ -21,7 +21,7 @@ int	hunger(t_app app, t_last_meal *last_meal)
 	pthread_mutex_lock(&last_meal->lock);
 	last_copy = *last_meal;
 	pthread_mutex_unlock(&last_meal->lock);
-	if (interval(last_copy.time) >= app.conf->ttd)
+	if (interval(last_copy.time) >= app->conf->ttd)
 	{
 		r = 1;
 	}

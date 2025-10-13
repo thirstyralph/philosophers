@@ -6,7 +6,7 @@
 /*   By: ranavarr <ranavarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 17:27:27 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/13 17:07:29 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:29:50 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while ((i < (*app).conf->n) && get_life(&(app->life)))
 		{
-			if (hunger(*app, &philos[i].last_meal) && get_life(&(app->life)))
+			if (hunger(app, &philos[i].last_meal) && get_life(&(app->life)))
 			{
 				safe_print(i, 4, app);
 				pthread_mutex_lock(&(app->life.lock));

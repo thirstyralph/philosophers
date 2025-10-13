@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/13 17:07:56 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 18:36:45 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	eat(t_philo *self)
 	safe_print(self->id, 3, self->app);
 	if (self->id % 2 == 0)
 	{
-		take_fork(self->app, self->id, self->fork_r);
+		take_fork(self->app, self->id, self->fork_r);	//aqui hacer una array tamaño 2 para saber donde se ha bloqueado y dodne no, o algo asi, no se
 		take_fork(self->app, self->id, self->fork_l);
 	}
 	else
