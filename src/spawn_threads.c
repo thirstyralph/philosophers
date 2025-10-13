@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/12 19:45:52 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 17:27:26 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@ void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 {
 	philo->id = i;
 	philo->app = app;
-	philo->meals = 0;
 	pthread_mutex_init(&philo->last_meal.lock, NULL);
 	pthread_mutex_init(&philo->full.lock, NULL);
+	pthread_mutex_lock(&philo->last_meal.lock);
+	philo->meals = 0;
+	pthread_mutex_unlock(&philo->last_meal.lock);
 	pthread_mutex_lock(&philo->last_meal.lock);
 	philo->last_meal.time = app->start;
 	pthread_mutex_unlock(&philo->last_meal.lock);

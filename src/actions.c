@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/12 20:26:55 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/13 17:07:56 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,7 @@ void	eat(t_philo *self)
 	}
 	drop_fork(self->fork_l);
 	drop_fork(self->fork_r);
-	pthread_mutex_lock(&self->meals_lock);
 	self->meals++;
-	pthread_mutex_unlock(&self->meals_lock);
 }
 
 /*
