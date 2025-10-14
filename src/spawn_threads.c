@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 12:26:24 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/13 17:27:26 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/14 18:43:48 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,19 @@ void	set_philo(uint32_t i, t_philo *philo, t_app *app)
 /*
  * reates a thread array and initializes all of it's components
 */
-t_philo	*spawn_threads(t_app *app)
+t_philo	*spawn_threads(int argc, char *argv)
 {
-	t_philo		*r;
-	uint32_t	i;
+	t_conf			conf;
+	pthread_mutex_t	*forks;
+	t_app			app;
+	t_philo			*r;
+	uint32_t		i;
 
+	conf = parse(argc, &argv);
+	forks = spawn_forks(conf.n);
+	if (forks == NULL)
+		return (NULL);
+	app = unify(&conf, forks);
 	i = 0;
 	r = malloc(sizeof(t_philo) * (app->conf->n));
 	if (!r)

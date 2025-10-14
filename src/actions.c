@@ -6,16 +6,20 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/13 18:36:45 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/14 18:38:10 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	take_fork(t_app *app, uint32_t id, pthread_mutex_t *fork)
+int	take_fork(t_app *app, uint32_t id, pthread_mutex_t *fork)
 {
-	pthread_mutex_lock(fork);
-	safe_print(id, 0, app);
+	if (pthread_mutex_lock(fork))
+	{
+		safe_print(id, 0, app);
+		return (0);
+	}
+	return (1);
 }
 
 void	drop_fork(pthread_mutex_t *fork)

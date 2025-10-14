@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:25 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/09 10:39:33 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/14 18:40:13 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  * Al morir un filosofo, ocurrir algun error o llegar al limite
  * Se liberan todas las arrays (filosofos y tenedores)
  * return (0);
+ * I declare too many variables, i must include evering inside spawn threads
  */
 int	main(int argc, char *argv[])
 {
@@ -34,6 +35,9 @@ int	main(int argc, char *argv[])
 	if (forks == NULL)
 		return (1);
 	app = unify(&conf, forks);
+	//philos = spawn_threads(argc, argv)
+	//if (!philos)
+	//	return (1)
 	philos = spawn_threads(&app);
 	if (!philos)
 	{
