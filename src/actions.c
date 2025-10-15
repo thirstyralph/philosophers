@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/01 16:24:47 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/14 18:38:10 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/15 22:32:57 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,28 @@ void	drop_fork(pthread_mutex_t *fork)
  * take_fork only works while life == 1 so if that's not true, we 
  * unlock an unlock mutex...
  */
-void	eat(t_philo *self)
+void	eat(t_philo *self) //estou bastante seguro de que aqui no suelto los mutexesseses cuando se me muer eun filosofo
 {
+	int	taken[2];
+
+	taken[0] = 0;
+	taken[1] = 0;
 	if (!get_life(&self->app->life))
 		return ;
 	safe_print(self->id, 3, self->app);
 	if (self->id % 2 == 0)
 	{
-		take_fork(self->app, self->id, self->fork_r);	//aqui hacer una array tamaño 2 para saber donde se ha bloqueado y dodne no, o algo asi, no se
-		take_fork(self->app, self->id, self->fork_l);
+		if (!take_fork(self->app, self->id, self->fork_r))	//aqui hacer una array tamaño 2 para saber donde se ha bloqueado y dodne no, o algo asi, no s
+			taken[0] = 1;
+		if (!take_fork(self->app, self->id, self->fork_l))
+			taken[1] = 1;
 	}
 	else
 	{
-		take_fork(self->app, self->id, self->fork_l);
-		take_fork(self->app, self->id, self->fork_r);
+		if (take_fork(self->app, self->id, self->fork_r))
+			taken[0] = 1;
+		if (take_fork(self->app, self->id, self->fork_l))
+			taken[1] = 1;
 	}
 	if (get_life(&self->app->life))
 	{
@@ -61,8 +69,10 @@ void	eat(t_philo *self)
 		pthread_mutex_unlock(&(self->last_meal.lock));
 		active_sleep(&(self->app->life), self->app->conf->tte);
 	}
-	drop_fork(self->fork_l);
-	drop_fork(self->fork_r);
+	if (taken[0])
+		drop_fork(self->fork_l);
+	if (taken[1])
+		drop_fork(self->fork_r);
 	self->meals++;
 }
 

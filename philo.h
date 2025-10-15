@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/13 18:30:38 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/15 22:05:51 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ pthread_mutex_t			*spawn_forks(uint32_t n);
 pthread_mutex_t			*inipthread_mutex_ts(uint32_t n);
 //utils.c
 t_app					unify(t_conf *conf, pthread_mutex_t *forks);
-void					destroy_and_free(t_philo *philos);
+void					destroy_and_free(t_philo *philos, t_app *app);
 int						get_life(t_life_state *life);
 int						is_full(t_full_state *full);
 int						check_all_full(t_philo *philos);

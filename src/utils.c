@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 20:24:36 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/12 14:20:07 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/15 22:05:30 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ t_app	unify(t_conf *conf, pthread_mutex_t *forks)
  * destroys the print mutex
  * frees fork and philos array
  */
-void	destroy_and_free(t_philo *philos)
+void	destroy_and_free(t_philo *philos, t_app *app)
 {
 	uint32_t	i;
 
 	i = 0;
-	while (i < philos->app->conf->n)
+	while (i < app->conf->n)
 	{
-		pthread_mutex_destroy(&philos->app->forks[i]);
-		pthread_mutex_destroy(&philos[i].last_meal.lock);
+		if (app)
+			pthread_mutex_destroy(&app->forks[i]);
+		if (philos)
+			pthread_mutex_destroy(&philos[i].last_meal.lock);
 		i++;
 	}
 	pthread_mutex_destroy(&philos->app->print);
-	free(philos->app->forks);
-	free(philos);
 }
 
 int	get_life(t_life_state *life)
