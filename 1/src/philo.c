@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/17 01:38:49 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/19 13:38:00 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,16 @@ t_app	*init(int argc, char **argv)
  */
 int	philo(int argc, char **argv)
 {
-	t_app	*app;
-	t_fork	*forks;
+	t_app			*app;
+	pthread_mutex_t	*forks;
 
 	app = init(argc, argv);
 	if (!app)
 		return (1);
+	forks = spawn_forks(app->conf->n);
+	if (!forks)
+		return (1);
+
 	free(app->conf);
 	free(app);
 	return (0);
