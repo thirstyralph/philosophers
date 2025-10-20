@@ -16,6 +16,9 @@
 //2. takes forks
 //3. eats
 //4. sleeps
+/*
 void	life_cycle(t_philo *self)
 {
+
 }
+*/

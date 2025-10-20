@@ -24,5 +24,8 @@ void	*philo_routine(void *param)
 
 	self = (t_philo *)(param);
 	while (get_life(self->app))
+	{
 		printf("sigo vivo\n");
+		active_sleep(20000, self->app);
+	}
 }

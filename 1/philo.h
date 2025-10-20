@@ -23,18 +23,18 @@
 
 typedef struct s_conf
 {
-	unsigned int	n;
-	unsigned int	ttd;
-	unsigned int	tts;
-	unsigned int	tte;
-	unsigned int	limit;
+	uint32_t	n;
+	uint32_t	ttd;
+	uint32_t	tts;
+	uint32_t	tte;
+	uint32_t	limit;
 
 }	t_conf;
 
 typedef struct s_app
 {
 	t_conf				*conf;
-	unsigned int		life;
+	uint32_t			life;
 	struct timeval		start;
 	pthread_mutex_t		print;
 	pthread_mutex_t		life_lock;
@@ -45,21 +45,24 @@ typedef struct s_philo
 	pthread_t			thread;
 	t_app				*app;
 	t_conf				*conf;
-	unsigned int		id;
-	unsigned int		meals;
+	uint32_t			id;
+	uint32_t			meals;
 	struct timeval		last_meal;
 	pthread_mutex_t		*fork_l;
 	pthread_mutex_t		*fork_r;
 	pthread_mutex_t		meals_lock;
 }	t_philo;
 
+//active_sleep.c
+unsigned int	interval(struct timeval start);
+void			active_sleep(uint32_t time, t_app *app);
 //routines
 void			*philo_routine(void *param);
 //get_life.c
 int				get_life(t_app *app);
 //spawn_forks.c
-pthread_mutex_t	*spawn_forks(unsigned int n);
-int				destroy_and_free_forks(pthread_mutex_t *forks, unsigned long n);
+pthread_mutex_t	*spawn_forks(uint32_t n);
+int				destroy_and_free_forks(pthread_mutex_t *forks, uint32_t n);
 //parse.c
 t_conf			*parse(int argc, char **arg);
 //ft_atolu.c

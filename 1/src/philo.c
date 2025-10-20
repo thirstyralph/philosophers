@@ -32,6 +32,7 @@ t_app	*init(int argc, char **argv)
 	app = malloc(sizeof(t_app));
 	if (!app)
 		return (NULL);
+	app->conf = &conf;
 }
 
 /*

@@ -73,12 +73,12 @@ int	validate_len(int argc, char *argv[])
 
 int	validate_conf(int argc, t_conf r)
 {
-	if (r.n == (unsigned long)(-1) || r.ttd == (unsigned long)(-1)
-			|| r.tte == (unsigned long)(-1) || r.tts == (unsigned long)(-1))
+	if (r.n == (uint32_t)(-1) || r.ttd == (uint32_t)(-1)
+			|| r.tte == (uint32_t)(-1) || r.tts == (uint32_t)(-1))
 		return (0);
 	if (argc == 6)
 	{
-		if (r.limit == (unsigned long)(-1))
+		if (r.limit == (uint32_t)(-1))
 			return (0);
 	}
 	return (1);
