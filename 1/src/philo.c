@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/19 13:38:00 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/21 19:39:20 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ t_app	*init(int argc, char **argv)
 	app = malloc(sizeof(t_app));
 	if (!app)
 		return (NULL);
-	app->conf = &conf;
+	app->conf = conf;
+	return (app);
 }
 
 /*
@@ -55,6 +56,7 @@ int	philo(int argc, char **argv)
 {
 	t_app			*app;
 	pthread_mutex_t	*forks;
+	t_philo			*philos;
 
 	app = init(argc, argv);
 	if (!app)
@@ -62,7 +64,8 @@ int	philo(int argc, char **argv)
 	forks = spawn_forks(app->conf->n);
 	if (!forks)
 		return (1);
-
+	philos = spawn_threads(app);
+	join_philos(philos);
 	free(app->conf);
 	free(app);
 	return (0);

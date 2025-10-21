@@ -5,27 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/19 17:48:09 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/19 17:49:08 by ranavarr         ###   ########.fr       */
+/*   Created: 2025/09/30 12:50:34 by ranavarr          #+#    #+#             */
+/*   Updated: 2025/10/21 19:04:40 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-unsigned int	interval(struct timeval start)
+int	active_sleep(uint32_t time, t_app *app)
 {
-	struct timeval	time;
+	struct timeval	start;
 
-	gettimeofday(&time, NULL);
-	return (((time.tv_sec - start.tv_sec) * 1000)
-			+ ((time.tv_usec - start.tv_usec) / 1000));
-}
-
-void	active_sleep(uint32_t time, t_app *app)
-{
-	struct timeval	zero;
-
-	gettimeofday(&zero, NULL);
-	while ((interval(zero) < time) && get_life(app))
-		usleep(1000);
+	gettimeofday(&start, NULL);
+	while ((interval(start) < time) && get_life(app))
+	{
+		if (usleep(1000) != 0)
+			return (-1);
+	}
+	return (0);
 }

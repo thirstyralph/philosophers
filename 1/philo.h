@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/19 17:25:34 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/21 19:39:05 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,26 @@ typedef struct s_philo
 	pthread_mutex_t		meals_lock;
 }	t_philo;
 
+//spawn_threads
+t_philo					*spawn_threads(t_app *app);
+void					join_philos(t_philo *philos);
 //active_sleep.c
-unsigned int	interval(struct timeval start);
-void			active_sleep(uint32_t time, t_app *app);
+long unsigned			interval(struct timeval start);
+int						active_sleep(uint32_t time, t_app *app);
 //routines
-void			*philo_routine(void *param);
+void					*philo_routine(void *param);
 //get_life.c
-int				get_life(t_app *app);
+int						get_life(t_app *app);
 //spawn_forks.c
-pthread_mutex_t	*spawn_forks(uint32_t n);
-int				destroy_and_free_forks(pthread_mutex_t *forks, uint32_t n);
+pthread_mutex_t			*spawn_forks(uint32_t n);
+void					destroy_and_free_forks(pthread_mutex_t *forks, uint32_t n);
 //parse.c
-t_conf			*parse(int argc, char **arg);
+t_conf					*parse(int argc, char **arg);
 //ft_atolu.c
-unsigned long	ft_atolu(char *str);
+unsigned long			ft_atolu(char *str);
 //philosophers.c
-int				philo(int argc, char **argv);
+int						philo(int argc, char **argv);
 //main.c
-int				main(int argc, char **argv);
+int						main(int argc, char **argv);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 01:41:56 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/17 02:25:20 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/21 19:07:25 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
  * on success: pthread_mutex_t array;
  * on failure: NULL;
  */
-pthread_mutex_t	*spawn_fork(unsigned int n)
+pthread_mutex_t	*spawn_forks(uint32_t n)
 {
 	pthread_mutex_t	*forks;
-	int				i;
+	uint32_t		i;
 
 	forks = malloc(sizeof(pthread_mutex_t) * n);
 	if (!forks)
@@ -45,9 +45,9 @@ pthread_mutex_t	*spawn_fork(unsigned int n)
 	return (forks);
 }
 
-int	destroy_and_free_forks(pthread_mutex_t *forks, unsigned long n)
+void	destroy_and_free_forks(pthread_mutex_t *forks, uint32_t n)
 {
-	int	i;
+	uint32_t	i;
 
 	i = 0;
 	while (i < n)

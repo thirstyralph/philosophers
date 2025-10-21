@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 16:20:58 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/19 17:25:24 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/21 18:33:04 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,5 @@ void	*philo_routine(void *param)
 		printf("sigo vivo\n");
 		active_sleep(20000, self->app);
 	}
+	return (NULL);
 }
