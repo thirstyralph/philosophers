@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/21 19:39:20 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/22 16:09:52 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,15 @@ t_app	*init(int argc, char **argv)
 		return (NULL);
 	app = malloc(sizeof(t_app));
 	if (!app)
+		return (free(conf), NULL);
+	if (pthread_mutex_init(&app->life_lock, NULL))
+	{
+		free(conf);
+		free(app);
 		return (NULL);
+	}
 	app->conf = conf;
+	app->life = 1;
 	return (app);
 }
 
@@ -64,7 +71,7 @@ int	philo(int argc, char **argv)
 	forks = spawn_forks(app->conf->n);
 	if (!forks)
 		return (1);
-	philos = spawn_threads(app);
+	philos = spawn_threads(app, forks);
 	join_philos(philos);
 	free(app->conf);
 	free(app);

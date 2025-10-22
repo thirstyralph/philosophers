@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 01:41:56 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/21 19:07:25 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/22 14:55:37 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 	i = 0;
 	while (i < n)
 	{
-		if (!pthread_mutex_init(&forks[i], NULL))
+		if (pthread_mutex_init(&forks[i], NULL))
 		{
 			while (i < 0)
 			{
