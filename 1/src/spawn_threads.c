@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 02:32:42 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/22 16:05:03 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/22 18:13:51 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,30 @@
 void	assign_forks(t_philo *philo, uint32_t id, uint32_t n,
 		pthread_mutex_t *forks)
 {
-	philo->fork_l = &forks[(id + 1) % n];
-	philo->fork_r = &forks[id];
+	if (id == n - 1)
+	{
+		philo->fork_r = &forks[(id + 1) % n];
+		philo->fork_l = &forks[id];
+	}
+	else
+	{
+		philo->fork_l = &forks[(id + 1) % n];
+		philo->fork_r = &forks[id];
+	}
 }
 
 int	init_philo(t_philo *philos, uint32_t pos, t_app *app)
 {
-	if (pthread_mutex_init(&philos[pos].meals_lock, NULL))
-		return (1);
-	if (pthread_create(&philos[pos].thread, NULL, philo_routine, philos))
-		return (1);
 	philos[pos].last_meal = app->start;
 	philos[pos].conf = app->conf;
 	philos[pos].app = app;
 	philos[pos].meals = 0;
 	philos[pos].id = pos;
+	if (pthread_mutex_init(&philos[pos].meals_lock, NULL))
+		return (1);
+	if (pthread_create(&philos[pos].thread, NULL, philo_routine,
+			(void *)&philos[pos]))
+		return (1);
 	return (0);
 }
 
@@ -80,6 +89,7 @@ void	join_philos(t_philo *philos)
 	while (i < n)
 	{
 		pthread_join(philos[i].thread, NULL);
+		pthread_mutex_destroy(&philos[i].meals_lock);
 		i++;
 	}
 }

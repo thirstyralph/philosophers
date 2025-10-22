@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/22 16:09:52 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/22 16:55:32 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ t_app	*init(int argc, char **argv)
 		free(app);
 		return (NULL);
 	}
+	if (pthread_mutex_init(&app->print, NULL))
+	{
+		free(conf);
+		free(app);
+		return (NULL);
+	}
+	gettimeofday(&app->start, NULL);
 	app->conf = conf;
 	app->life = 1;
 	return (app);
