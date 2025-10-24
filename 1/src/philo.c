@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/22 16:55:32 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/24 19:03:08 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	philo(int argc, char **argv)
 	t_app			*app;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
+	pthread_t		monitor;
 
 	app = init(argc, argv);
 	if (!app)
@@ -79,6 +80,8 @@ int	philo(int argc, char **argv)
 	if (!forks)
 		return (1);
 	philos = spawn_threads(app, forks);
+	if (pthread_create(&monitor, NULL, monitor_routine, (void *)philos))
+		return (1);
 	join_philos(philos);
 	free(app->conf);
 	free(app);
