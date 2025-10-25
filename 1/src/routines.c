@@ -12,6 +12,16 @@
 
 #include "../philo.h"
 
+void	*lonely_routine(void *param)
+{
+	t_philo	*self;
+
+	self = (t_philo *)(param);
+	safe_print(0, 3, self->app);
+	safe_print(0, 0, self->app);
+	return (NULL);
+}
+
 //philospher 
 //thinks
 //takes forks
@@ -63,7 +73,7 @@ void	*monitor_routine(void *param)
 			pthread_mutex_lock(&philos[i].meals_lock);
 			time = philos[i].last_meal;
 			pthread_mutex_unlock(&philos[i].meals_lock);
-			if (interval(time) >= conf->ttd)
+			if (interval(time) > conf->ttd)
 			{
 				pthread_mutex_lock(&app->life_lock);
 				app->life = 0;

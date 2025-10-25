@@ -80,6 +80,7 @@ int	philo(int argc, char **argv)
 	if (!forks)
 		return (1);
 	philos = spawn_threads(app, forks);
+	usleep(1000);
 	if (pthread_create(&monitor, NULL, monitor_routine, (void *)philos))
 		return (1);
 	join_philos(philos);

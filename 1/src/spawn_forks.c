@@ -32,7 +32,7 @@ pthread_mutex_t	*spawn_forks(uint32_t n)
 	{
 		if (pthread_mutex_init(&forks[i], NULL))
 		{
-			while (i < 0)
+			while (i > 0)
 			{
 				pthread_mutex_destroy(&forks[i]);
 				i--;
