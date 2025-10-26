@@ -36,9 +36,18 @@ int	init_philo(t_philo *philos, uint32_t pos, t_app *app)
 	philos[pos].id = pos;
 	if (pthread_mutex_init(&philos[pos].meals_lock, NULL))
 		return (1);
-	if (pthread_create(&philos[pos].thread, NULL, philo_routine,
-			(void *)&philos[pos]))
-		return (1);
+	if (app->conf->n > 1)
+	{
+		if (pthread_create(&philos[pos].thread, NULL, philo_routine,
+				(void *)&philos[pos]))
+			return (1);
+	}
+	else
+	{
+		if (pthread_create(&philos[pos].thread, NULL, lonely_routine,
+				(void *)&philos[pos]))
+			return (1);
+	}
 	return (0);
 }
 
@@ -66,7 +75,8 @@ t_philo	*spawn_threads(t_app *app, pthread_mutex_t *forks)
 	while (i < app->conf->n)
 	{
 		pos = philo_order(i, app->conf->n);
-		assign_forks(&philos[pos], pos, app->conf->n, forks);
+		if (app->conf->n > 1)
+			assign_forks(&philos[pos], pos, app->conf->n, forks);
 		if (init_philo(philos, pos, app))
 		{
 			free(philos);

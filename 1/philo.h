@@ -62,6 +62,7 @@ void				join_philos(t_philo *philos);
 long unsigned		interval(struct timeval start);
 int					active_sleep(uint32_t time, t_app *app);
 //routines
+void				*lonely_routine(void *param);
 void				*philo_routine(void *param);
 void				*monitor_routine(void *param);
 //get_life.c
