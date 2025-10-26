@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 16:20:58 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/24 19:05:38 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/26 20:15:18 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,21 @@ void	*monitor_routine(void *param)
 	t_app			*app;
 	struct timeval	time;
 	uint32_t		i;
+	uint32_t		full;	
 
 	philos = (t_philo *)(param);
 	app = philos[0].app;
-	while (get_life(app))
+	full = 1;
+	while (get_life(app) && full)
 	{
+		full = 0;
 		i = 0;
 		while (i < app->conf->n)
 		{
 			pthread_mutex_lock(&philos[i].meals_lock);
 			time = philos[i].last_meal;
+			if (philos[i].meals < app->conf->limit)
+				full = 1;
 			pthread_mutex_unlock(&philos[i].meals_lock);
 			if (interval(time) > app->conf->ttd)
 				kill_philo(i, app);
