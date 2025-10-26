@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 16:20:58 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/26 20:15:18 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/26 21:23:15 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,37 +58,29 @@ void	*philo_routine(void *param)
 	return (NULL);
 }
 
-void	kill_philo(uint32_t id, t_app *app)
-{
-	pthread_mutex_lock(&app->life_lock);
-	app->life = 0;
-	pthread_mutex_unlock(&app->life_lock);
-	safe_print(id, 4, app);
-}
-
 void	*monitor_routine(void *param)
 {
 	t_philo			*philos;
 	t_app			*app;
+	uint32_t		full_philos;
 	struct timeval	time;
 	uint32_t		i;
-	uint32_t		full;	
 
 	philos = (t_philo *)(param);
 	app = philos[0].app;
-	full = 1;
-	while (get_life(app) && full)
+	full_philos = 0;
+	while (get_life(app))
 	{
-		full = 0;
+		full_philos = 0;
 		i = 0;
 		while (i < app->conf->n)
 		{
 			pthread_mutex_lock(&philos[i].meals_lock);
 			time = philos[i].last_meal;
-			if (philos[i].meals < app->conf->limit)
-				full = 1;
+			if (philos[i].meals > app->conf->limit)
+				full_philos++;
 			pthread_mutex_unlock(&philos[i].meals_lock);
-			if (interval(time) > app->conf->ttd)
+			if (full_philos == app->conf->n || interval(time) > app->conf->ttd)
 				kill_philo(i, app);
 			i++;
 		}

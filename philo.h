@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/23 19:41:05 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/26 21:11:10 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ typedef struct s_philo
 	pthread_mutex_t		meals_lock;
 }	t_philo;
 
+//utils.c
+void				kill_philo(int i, t_app *app);
 //safe_print.c
 void				safe_print(int philo, int action, t_app *app);
 //spawn_threads
