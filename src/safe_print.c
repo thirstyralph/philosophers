@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/22 16:15:15 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:02:09 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_state(int philosopher, int action, struct timeval start)
 
 void	safe_print(int philosopher, int action, t_app *app)
 {
-	if (get_life(app) || action == 4)
+	if (get_life(app))
 	{
 		pthread_mutex_lock(&app->print);
 		print_state(philosopher, action, app->start);

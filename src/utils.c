@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 20:22:14 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/27 15:27:33 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/27 16:01:52 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	kill_philo(int id, uint32_t full_philos, t_app *app)
 {
+	if (full_philos < app->conf->n)
+		safe_print(id, 4, app);
 	pthread_mutex_lock(&app->life_lock);
 	app->life = 0;
 	pthread_mutex_unlock(&app->life_lock);
-	if (full_philos < app->conf->n)
-		safe_print(id, 4, app);
 }
 
 void	get_time_full(t_philo *philo, struct timeval *time,
