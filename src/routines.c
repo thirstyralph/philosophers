@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 16:20:58 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/26 21:23:15 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/27 15:24:45 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,10 @@ void	*monitor_routine(void *param)
 		i = 0;
 		while (i < app->conf->n)
 		{
-			pthread_mutex_lock(&philos[i].meals_lock);
-			time = philos[i].last_meal;
-			if (philos[i].meals > app->conf->limit)
-				full_philos++;
-			pthread_mutex_unlock(&philos[i].meals_lock);
-			if (full_philos == app->conf->n || interval(time) > app->conf->ttd)
-				kill_philo(i, app);
+			get_time_full(&philos[i], &time, &full_philos);
+			if ((full_philos == app->conf->n && app->conf->limit != 0)
+				|| (interval(time) > app->conf->ttd))
+				kill_philo(i, full_philos, app);
 			i++;
 		}
 	}
