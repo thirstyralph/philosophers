@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:25:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/27 15:25:19 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:29:39 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_philo
 }	t_philo;
 
 //utils.c
-void				kill_philo(int i, uint32_t full_philos, t_app *app);
+void				kill_philo(int i, int cause, t_app *app);
 void				get_time_full(t_philo *philo, struct timeval *time,
 						uint32_t *full_philos);
 //safe_print.c

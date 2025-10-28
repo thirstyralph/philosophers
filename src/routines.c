@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 16:20:58 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/27 15:24:45 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:31:24 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ void	*philo_routine(void *param)
 	self = (t_philo *)(param);
 	while (get_life(self->app))
 	{
-		safe_print(self->id, 3, self->app);
-		safe_print(self->id, 0, self->app);
 		pthread_mutex_lock(self->fork_r);
 		safe_print(self->id, 0, self->app);
 		pthread_mutex_lock(self->fork_l);
+		safe_print(self->id, 0, self->app);
 		safe_print(self->id, 1, self->app);
 		pthread_mutex_lock(&self->meals_lock);
 		gettimeofday(&self->last_meal, NULL);
 		self->meals++;
 		pthread_mutex_unlock(&self->meals_lock);
 		active_sleep(self->conf->tte, self->app);
+		safe_print(self->id, 3, self->app);
 		pthread_mutex_unlock(self->fork_r);
 		pthread_mutex_unlock(self->fork_l);
 		safe_print(self->id, 2, self->app);
@@ -76,9 +76,10 @@ void	*monitor_routine(void *param)
 		while (i < app->conf->n)
 		{
 			get_time_full(&philos[i], &time, &full_philos);
-			if ((full_philos == app->conf->n && app->conf->limit != 0)
-				|| (interval(time) > app->conf->ttd))
-				kill_philo(i, full_philos, app);
+			if (full_philos == app->conf->n && app->conf->limit != 0)
+				kill_philo(i, 0, app);
+			if (interval(time) > app->conf->ttd)
+				kill_philo(i, 1, app);
 			i++;
 		}
 	}

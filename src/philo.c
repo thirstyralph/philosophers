@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 23:33:37 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/24 19:03:08 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 20:34:43 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,11 @@ int	philo(int argc, char **argv)
 	if (!forks)
 		return (1);
 	philos = spawn_threads(app, forks);
-	usleep(1000);
+	usleep(500);
 	if (pthread_create(&monitor, NULL, monitor_routine, (void *)philos))
 		return (1);
 	join_philos(philos);
+	pthread_join(monitor, NULL);
 	free(app->conf);
 	free(app);
 	return (0);

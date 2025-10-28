@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 13:21:29 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/24 13:21:32 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 22:28:11 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_philo	*spawn_threads(t_app *app, pthread_mutex_t *forks)
 			return (NULL);
 		}
 		i++;
+		usleep(200);
 	}
 	return (philos);
 }

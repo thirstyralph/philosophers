@@ -6,7 +6,7 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 18:18:03 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/27 16:02:09 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 15:41:12 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	print_state(int philosopher, int action, struct timeval start)
 	else if (action == 3)
 		printf("is thinking");
 	else if (action == 4)
-		printf("has died");
+		printf("died");
 	else
 		printf("something has gone really wrong action = %d\n", action);
 	printf("\n");

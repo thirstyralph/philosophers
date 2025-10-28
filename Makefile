@@ -1,6 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/10/28 22:28:43 by ranavarr          #+#    #+#              #
+#    Updated: 2025/10/28 22:28:46 by ranavarr         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME	:= philo
 CC		:= cc
-CFLAGS	:= -O0 -Wextra -Wall -Werror -g
+CFLAGS	:= -Wextra -Wall -Werror -g
 SRC_DIR = src
 OBJ_DIR = obj
 
@@ -29,5 +41,3 @@ fclean: clean
 	@rm -rf $(NAME)
 
 re: fclean all
-
-.PHONY: all, clean, fclean, re, libmlx

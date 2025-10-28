@@ -6,15 +6,20 @@
 /*   By: ranavarr <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 20:22:14 by ranavarr          #+#    #+#             */
-/*   Updated: 2025/10/27 16:01:52 by ranavarr         ###   ########.fr       */
+/*   Updated: 2025/10/28 13:29:56 by ranavarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void	kill_philo(int id, uint32_t full_philos, t_app *app)
+/*
+ * void	kill_philo
+ * prints the death message if and only if a philo has died of hunger
+ * and turns app->life to 0, ending the execution loop.
+ */
+void	kill_philo(int id, int cause, t_app *app)
 {
-	if (full_philos < app->conf->n)
+	if (cause == 1)
 		safe_print(id, 4, app);
 	pthread_mutex_lock(&app->life_lock);
 	app->life = 0;
